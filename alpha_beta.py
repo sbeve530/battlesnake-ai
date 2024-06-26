@@ -20,7 +20,9 @@ def alpha_beta_decision(game_state: typing.Dict, depth: int) -> typing.Dict:
 
 def max_value(game_state, alpha, beta, depth) -> float:
   if depth < 1 or is_terminal(game_state):
-    return utility(game_state)
+    foo = utility(game_state)
+    print(foo)
+    return foo
   value = -math.inf
   for moves, new_state in successors(game_state):
     value = max(value, min_value(new_state, alpha, beta, depth - 1))
@@ -34,7 +36,9 @@ def max_value(game_state, alpha, beta, depth) -> float:
 
 def min_value(game_state, alpha, beta, depth) -> float:
   if depth < 1 or is_terminal(game_state):
-    return utility(game_state)
+    foo = utility(game_state)
+    print(foo)
+    return foo
   value = math.inf
   for moves, new_state in successors(game_state):
     value = min(value, max_value(new_state, alpha, beta, depth - 1))
@@ -102,7 +106,8 @@ def utility(game_state: typing.Dict) -> float:
     else:
       utility_value += 3
 
-  utility_value += total_inverse_distance
+  utility_value += total_inverse_distance / len(food_sources)
+  
   return utility_value
 
 
