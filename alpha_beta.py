@@ -15,7 +15,6 @@ def alpha_beta_decision(game_state: typing.Dict, depth: int) -> typing.Dict:
     if value > best_value:
       best_value = value
       best_move = moves[0]
-      
   return {"move": best_move} if best_move else {"move": "down"}
 
 
@@ -91,6 +90,7 @@ def safe_moves(game_state: typing.Dict, snake: typing.Dict) -> typing.List[str]:
 
   # Utility function to evaluate game state based on the sum of the inverses of the distances to the food sources
 def utility(game_state: typing.Dict) -> float:
+  utility_value = 0
   my_head = game_state["you"]["body"][0]
   food_sources = game_state["board"]["food"]
 
@@ -99,7 +99,11 @@ def utility(game_state: typing.Dict) -> float:
     distance = abs(my_head["x"] - food["x"]) + abs(my_head["y"] - food["y"])
     if distance != 0:
       total_inverse_distance += 1 / distance
-  return total_inverse_distance
+    else:
+      utility_value += 3
+
+  utility_value += total_inverse_distance
+  return utility_value
 
 
 # Successors function to generate all possible states
