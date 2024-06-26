@@ -79,7 +79,7 @@ def safe_moves(game_state: Dict, snake: Dict) -> List[str]:
         possible_moves.pop(0)
     end = time.time()
 
-    print(end - start)
+    print("safe_moves: " + str(end - start))
     return possible_moves
 
     # Utility function to evaluate game state based on the sum of the inverses of the distances to the food sources
@@ -121,6 +121,7 @@ def successors(game_state: Dict) -> List[Tuple[str, Dict]]:
 
     generate_states([], 0)
 
+
     return next_states
 
 
@@ -160,6 +161,19 @@ def simulate_move(game_state: Dict, snake: Dict, move: str) -> Dict:
         new_state["you"] = snake_copy
 
     return new_state
+
+def simulate_move2(game_state: Dict, snake: int, move: str) -> Dict:
+    new_state = deepcopy(game_state)
+    if move == "up":
+        new_state["you"]["body"][1]["y"] += 1
+    elif move == "down":
+        new_state["you"]["body"][1]["y"] -= 1
+    if move == "left":
+        new_state["you"]["body"][1]["x"] -= 1
+    elif move == "right":
+        new_state["you"]["body"][1]["x"] += 1
+
+    new_state["board"]["snakes"][snake]["body"].pop()
 
 
 # TODO: Check if the game state is terminal
