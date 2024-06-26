@@ -1,4 +1,4 @@
-import copy
+from copy import deepcopy
 from typing import Dict, List, Tuple
 import math
 import time
@@ -126,7 +126,7 @@ def successors(game_state: Dict) -> List[Tuple[str, Dict]]:
 
 # Simulate multiple moves for all snakes
 def simulate_moves(game_state: Dict, moves: List[str]) -> Dict:
-    new_state = copy.deepcopy(game_state)
+    new_state = deepcopy(game_state)
     for i, move in enumerate(moves):
         snake = new_state["board"]["snakes"][i]
         new_state = simulate_move(new_state, snake, move)
@@ -136,9 +136,9 @@ def simulate_moves(game_state: Dict, moves: List[str]) -> Dict:
 
 # Simulate move function
 def simulate_move(game_state: Dict, snake: Dict, move: str) -> Dict:
-    new_state = copy.deepcopy(game_state)
-    snake_copy = copy.deepcopy(snake)
-    new_head = copy.deepcopy(snake_copy["body"][0])
+    new_state = deepcopy(game_state)
+    snake_copy = deepcopy(snake)
+    new_head = deepcopy(snake_copy["body"][0])
     if move == "up":
         new_head["y"] += 1
     elif move == "down":
