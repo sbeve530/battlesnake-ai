@@ -80,7 +80,7 @@ def move(game_state: typing.Dict) -> typing.Dict:
     if my_head["y"] == board_height - 1: # Head is at upper boarder, don't move up
         is_move_safe["up"] = False
 
-    # prevent Battlesnake from colliding with itself
+    # prevent Battlesnake from colliding with itself (redundent because of all snake collision detection below)
     #my_body = game_state["you"]["body"]
     #if {"x": my_head["x"] - 1, "y": my_head["y"]} in my_body:     # Body left to head, don't move left
     #    is_move_safe["left"] = False
@@ -117,9 +117,6 @@ def move(game_state: typing.Dict) -> typing.Dict:
 
 
     # Choose move 
-    
-    
-    # Choose a random move from the safe ones
     next_move = random.choice(safe_moves)
 
     # TODO: Step 4 - Move towards food instead of random, to regain health and survive longer
@@ -139,24 +136,3 @@ if __name__ == "__main__":
          "move": move, 
         "end": end
     })
-
-# Rate state (heuristik)
-def rate_state(game_state):
-    # closer to food is better
-    foods = game_state["board"]["food"]
-    rating = 0
-    for food in foods:
-        distance = abs(game_state["you"]["head"]["x"] - food["x"]) + abs(game_state["you"]["head"]["y"] - food["y"])
-        rating += 1 / distance
-    return rating
-        
-
-# Explore next possible States (only for own snake for now)
-def explore(game_state):
-    possible_states = []
-    for move in [{0, 1}, {0, -1}, {-1, 0}, {1, 0}]:
-        new_state = copy.deepcopy(game_state)
-        new_state["you"]["head"]["x"] += move[0]
-        new_state["you"]["head"]["y"] += move[1]
-        possible_states.append(new_state)
-        
