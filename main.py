@@ -14,6 +14,8 @@ import random
 import typing
 import copy
 
+from alpha_beta import *
+
 
 # info is called when you create your Battlesnake on play.battlesnake.com
 # and controls your Battlesnake's appearance
@@ -44,86 +46,10 @@ def end(game_state: typing.Dict):
 # Valid moves are "up", "down", "left", or "right"
 # See https://docs.battlesnake.com/api/example-move for available data
 def move(game_state: typing.Dict) -> typing.Dict:
-
-    is_move_safe = {
-      "up": True, 
-      "down": True, 
-      "left": True, 
-      "right": True
-    }
-
-    # prevent Battlesnake from moving backwards
-    my_head = game_state["you"]["body"][0]  # Coordinates of your head
-    my_neck = game_state["you"]["body"][1]  # Coordinates of your "neck"
-
-    if my_neck["x"] < my_head["x"]:  # Neck is left of head, don't move left
-        is_move_safe["left"] = False
-
-    elif my_neck["x"] > my_head["x"]:  # Neck is right of head, don't move right
-        is_move_safe["right"] = False
-
-    elif my_neck["y"] < my_head["y"]:  # Neck is below head, don't move down
-        is_move_safe["down"] = False
-
-    elif my_neck["y"] > my_head["y"]:  # Neck is above head, don't move up
-        is_move_safe["up"] = False
-
-    # prevent Battlesnake from moving out of bounds
-    board_width = game_state["board"]["width"]
-    board_height = game_state["board"]["height"]
-    if my_head["x"] == 0:    # Head is at left boarder, don't move left
-        is_move_safe["left"] = False
-    if my_head["x"] == board_width - 1: # Head is at right boarder, don't move right
-        is_move_safe["right"] = False
-    if my_head["y"] == 0:    # Head is at bottom boarder, don't move down
-        is_move_safe["down"] = False
-    if my_head["y"] == board_height - 1: # Head is at upper boarder, don't move up
-        is_move_safe["up"] = False
-
-    # prevent Battlesnake from colliding with itself (redundent because of all snake collision detection below)
-    #my_body = game_state["you"]["body"]
-    #if {"x": my_head["x"] - 1, "y": my_head["y"]} in my_body:     # Body left to head, don't move left
-    #    is_move_safe["left"] = False
-    #if {"x": my_head["x"] + 1, "y": my_head["y"]} in my_body:     # Body right to head, don't move right
-    #    is_move_safe["right"] = False
-    #if {"x": my_head["x"], "y": my_head["y"] - 1} in my_body:     # Body under to head, don't move down
-    #    is_move_safe["down"] = False    
-    #if {"x": my_head["x"], "y": my_head["y"] + 1} in my_body:     # Body over to head, don't move up
-    #    is_move_safe["up"] = False   
-
-    # prevent Battlesnake from colliding with other Battlesnakes
-    snakes = game_state["board"]["snakes"]
-    for snake in snakes:
-        snake_body = snake["body"]
-        if {"x": my_head["x"] - 1, "y": my_head["y"]} in snake_body:     # Body left to head, don't move left
-            is_move_safe["left"] = False
-        if {"x": my_head["x"] + 1, "y": my_head["y"]} in snake_body:     # Body right to head, don't move right
-            is_move_safe["right"] = False
-        if {"x": my_head["x"], "y": my_head["y"] - 1} in snake_body:     # Body under to head, don't move down
-            is_move_safe["down"] = False
-        if {"x": my_head["x"], "y": my_head["y"] + 1} in snake_body:     # Body over to head, don't move up
-            is_move_safe["up"] = False
-
-    # Are there any safe moves left?
-    safe_moves = []
-    for move, isSafe in is_move_safe.items():
-        if isSafe:
-            safe_moves.append(move)
-
-    if len(safe_moves) == 0:
-        print(f"MOVE {game_state['turn']}: No safe moves detected! Moving down")
-        return {"move": "down"}
-
-
-
-    # Choose move 
-    next_move = random.choice(safe_moves)
-
-    # TODO: Step 4 - Move towards food instead of random, to regain health and survive longer
-    # food = game_state['board']['food']
+    next_move = alpha_beta_decision(game_state, 4)
 
     print(f"MOVE {game_state['turn']}: {next_move}")
-    return {"move": next_move}
+    return next_move
 
 
 # Start server when `python main.py` is run
