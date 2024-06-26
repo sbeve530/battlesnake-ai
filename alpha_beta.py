@@ -1,6 +1,7 @@
 import copy
 import typing
 import math
+import time
 
 
 def alpha_beta_decision(game_state: typing.Dict, depth: int) -> typing.Dict:
@@ -52,6 +53,7 @@ def min_value(game_state, alpha, beta, depth) -> float:
 
 
 def safe_moves(game_state: typing.Dict, snake: typing.Dict) -> typing.List[str]:
+    start = time.time()
     possible_moves = [
         "up",
         "down",
@@ -75,10 +77,13 @@ def safe_moves(game_state: typing.Dict, snake: typing.Dict) -> typing.List[str]:
         possible_moves.pop(1)
     elif snake_head["y"] == board_height - 1 or {"x": snake_head["x"], "y": snake_head["y"] + 1} in other_bodies:
         possible_moves.pop(0)
+    end = time.time()
 
+    print(end - start)
     return possible_moves
 
     # Utility function to evaluate game state based on the sum of the inverses of the distances to the food sources
+
 
 def utility(game_state: typing.Dict) -> float:
     utility_value = 0
