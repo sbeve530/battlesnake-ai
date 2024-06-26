@@ -1,10 +1,10 @@
 import copy
-import typing
+from typing import Dict, List, Tuple
 import math
 import time
 
 
-def alpha_beta_decision(game_state: typing.Dict, depth: int) -> typing.Dict:
+def alpha_beta_decision(game_state: Dict, depth: int) -> Dict:
     if depth < 1:
         return {"move": "down"}
     alpha = -math.inf
@@ -52,7 +52,7 @@ def min_value(game_state, alpha, beta, depth) -> float:
     return value
 
 
-def safe_moves(game_state: typing.Dict, snake: typing.Dict) -> typing.List[str]:
+def safe_moves(game_state: Dict, snake: Dict) -> List[str]:
     start = time.time()
     possible_moves = [
         "up",
@@ -85,7 +85,7 @@ def safe_moves(game_state: typing.Dict, snake: typing.Dict) -> typing.List[str]:
     # Utility function to evaluate game state based on the sum of the inverses of the distances to the food sources
 
 
-def utility(game_state: typing.Dict) -> float:
+def utility(game_state: Dict) -> float:
     utility_value = 0
     my_head = game_state["you"]["body"][0]
     food_sources = game_state["board"]["food"]
@@ -104,7 +104,7 @@ def utility(game_state: typing.Dict) -> float:
 
 
 # Successors function to generate all possible states
-def successors(game_state: typing.Dict) -> typing.List[typing.Tuple[str, typing.Dict]]:
+def successors(game_state: Dict) -> List[Tuple[str, Dict]]:
     snakes = game_state["board"]["snakes"]
     moves_list = [safe_moves(game_state, snake) for snake in snakes]
 
@@ -125,7 +125,7 @@ def successors(game_state: typing.Dict) -> typing.List[typing.Tuple[str, typing.
 
 
 # Simulate multiple moves for all snakes
-def simulate_moves(game_state: typing.Dict, moves: typing.List[str]) -> typing.Dict:
+def simulate_moves(game_state: Dict, moves: List[str]) -> Dict:
     new_state = copy.deepcopy(game_state)
     for i, move in enumerate(moves):
         snake = new_state["board"]["snakes"][i]
@@ -135,7 +135,7 @@ def simulate_moves(game_state: typing.Dict, moves: typing.List[str]) -> typing.D
 
 
 # Simulate move function
-def simulate_move(game_state: typing.Dict, snake: typing.Dict, move: str) -> typing.Dict:
+def simulate_move(game_state: Dict, snake: Dict, move: str) -> Dict:
     new_state = copy.deepcopy(game_state)
     snake_copy = copy.deepcopy(snake)
     new_head = copy.deepcopy(snake_copy["body"][0])
@@ -163,5 +163,5 @@ def simulate_move(game_state: typing.Dict, snake: typing.Dict, move: str) -> typ
 
 
 # TODO: Check if the game state is terminal
-def is_terminal(game_state: typing.Dict) -> bool:
+def is_terminal(game_state: Dict) -> bool:
     return False
