@@ -1,6 +1,5 @@
 from copy import deepcopy
 from typing import Dict, List, Tuple
-from test import *
 import math
 import time
 
@@ -53,7 +52,16 @@ def min_value(game_state, alpha, beta, depth) -> float:
     return value
 
 
-def safe_moves(game_state: Dict, snake: Dict) -> List[str]:
+def safe_moves(game_state :Dict, snake: Dict) -> List[str]:
+    """Checks if a move would end in the snake dying on next turn
+
+    :param game_state: Game state of the game
+    :param snake: Snake state of the game
+    :return: List of possible moves
+    :type game_state: Dict
+    :type snake: Dict
+    :rtype: List[str]
+    """
     start = time.time()
     possible_moves = [
         "up",
@@ -126,9 +134,12 @@ def successors(game_state: Dict) -> List[Tuple[str, Dict]]:
     return next_states
 
 
-# Simulate multiple moves for all snakes
 def simulate_moves(game_state: Dict, moves: List[str]) -> Dict:
-    """Simulates a turn and returns the next game state."""
+    """Simulates a turn and returns the next game state.
+        @param game_state {dict} The game state of the game
+        @param moves {List[str]} The moves to simulate
+        @return {dict} The next game state
+    """
     new_state = deepcopy(game_state)
     for i, move in enumerate(moves):
         snake = new_state["board"]["snakes"][i]
@@ -136,8 +147,20 @@ def simulate_moves(game_state: Dict, moves: List[str]) -> Dict:
 
     return new_state
 
+type simple_game_state = Tuple["x_size":int, int, List[str], List[Dict[str, int]], Dict]
 
-# Simulate move function
+
+
+
+
+def simulate_moves_2(game_state: SimpleGameState, moves: List[str]) -> SimpleGameState:
+    tmp_state = deepcopy(game_state)
+    for i, move in enumerate(moves):
+        if move == "up":
+            tmp_state.snakes[i].insert(0, {"x": game_state.snakes[i][0]["x"], "y": game_state.snakes[i][0]["y"] + 1})
+    return tmp_state
+
+
 def simulate_move(game_state: Dict, snake: Dict, move: str) -> Dict:
     new_state = deepcopy(game_state)
     snake_copy = deepcopy(snake)
@@ -164,18 +187,24 @@ def simulate_move(game_state: Dict, snake: Dict, move: str) -> Dict:
 
     return new_state
 
-def simulate_move2(game_state: Dict, snake: int, move: str) -> Dict:
+def simulate_move2(game_state: Dict, snake_index: int, move: str) -> Dict:
     new_state = deepcopy(game_state)
+    new_snake_head = deepcopy(game_state["snakes"][snake_index]["body"][0])
     if move == "up":
-        new_state["you"]["body"][1]["y"] += 1
+        new_snake_head["y"] += 1
     elif move == "down":
-        new_state["you"]["body"][1]["y"] -= 1
+        new_snake_head["y"] -= 1
     if move == "left":
-        new_state["you"]["body"][1]["x"] -= 1
+        new_snake_head["x"] -= 1
     elif move == "right":
-        new_state["you"]["body"][1]["x"] += 1
+        new_snake_head["x"] += 1
 
-    new_state["board"]["snakes"][snake]["body"].pop()
+    new_state["board"]["snakes"][snake_index]["body"].insert(0, new_snake_head)
+    new_state["board"]["snakes"][snake_index]["head"] = new_snake_head
+    if snake_index == 0:
+        new_state["you"]["head"] = new_snake_head
+    new_state["board"]["snakes"]["you"]["head"] = new_state["you"]["body"][0]
+    new_state["board"]["snakes"]["snake"]["body"].pop()
 
 
 # TODO: Check if the game state is terminal

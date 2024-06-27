@@ -1,4 +1,4 @@
-from alpha_beta import *
+from alpha_beta import simulate_moves, simulate_move2, SimpleGameState, simulate_moves_2
 
 test_game_state = {
     "game": {
@@ -90,4 +90,12 @@ test_game_state = {
     }
 }
 
-print(test_game_state)
+test_moves = [
+    "up", "up"
+]
+
+foo = SimpleGameState(test_game_state)
+print(foo.snakes)
+
+foo.next_move(test_moves)
+print(foo.snakes)
