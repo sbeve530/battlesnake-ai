@@ -46,10 +46,29 @@ def end(game_state: typing.Dict):
 # Valid moves are "up", "down", "left", or "right"
 # See https://docs.battlesnake.com/api/example-move for available data
 def move(game_state: typing.Dict) -> typing.Dict:
-    next_move = alpha_beta_decision(game_state, 4)
+    #next_move = alpha_beta_decision(game_state, 4)
+    if game_state["you"]["length"] <= 3:
+        food = game_state["board"]["food"][0]
+        if game_state["you"]["head"]["x"] < food["x"]:
+            return {"move": "right"}
+        if game_state["you"]["head"]["x"] > food["x"]:
+            return {"move": "left"}
+        if game_state["you"]["head"]["y"] < food["y"]:
+            return {"move": "up"}
+        if game_state["you"]["head"]["y"] > food["y"]:
+            return {"move": "down"}
+    else:
+        if game_state["turn"] % 4 == 0:
+            return {"move": "up"}
+        if game_state["turn"] % 4 == 1:
+            return {"move": "right"}
+        if game_state["turn"] % 4 == 2:
+            return {"move": "down"}
+        if game_state["turn"] % 4 == 3:
+            return {"move": "left"}
 
-    print(f"MOVE {game_state['turn']}: {next_move}")
-    return next_move
+
+    #print(f"MOVE {game_state['turn']}: {next_move}")
 
 
 # Start server when `python main.py` is run

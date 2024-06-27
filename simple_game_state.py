@@ -21,6 +21,9 @@ class SimpleGameState:
         return new_state
 
     def get_safe_moves(self, snake_index: int) -> list[str]:
+        """Returns a list of all  possible moves for a snake
+        :param snake_index: Index of the snake to get moves for
+        :return: A list of all possible moves for a snake"""
         possible_moves = [
             "up",
             "down",
@@ -29,7 +32,7 @@ class SimpleGameState:
         ]
         snake_head = self.snakes[snake_index][0]
         all_snake_bodies = [snake_cell for snake_cell in self.snakes]
-        
+
         if snake_head["x"] == 0 or {"x": snake_head["x"] - 1, "y": snake_head["y"]} in all_snake_bodies:
             possible_moves.pop(2)
         elif snake_head["x"] == self.x_size - 1 or {"x": snake_head["x"] + 1, "y": snake_head["y"]} in all_snake_bodies:
@@ -44,10 +47,11 @@ class SimpleGameState:
 
     def next_move(self, moves:list[str]):
         """Calculates next state given moves for all snakes.
-        Returns next state and eliminated snakes (removes eliminated snakes from next state).
+        :param moves: A list of moves for all snakes
+        :return: new updated state and eliminated snakes
         """
         tmp_state = self.copy()
-
+        eliminated_snakes = [] # indices of all eliminated snakes
         for i, snake in enumerate(self.snakes):
             if len(tmp_state.get_safe_moves(i)) == 0:
                 pass
@@ -63,9 +67,4 @@ class SimpleGameState:
             elif move == "right":
                 tmp_state.snakes[i].insert(0, {"x": self.snakes[i][0]["x"] + 1, "y": self.snakes[i][0]["y"]})
 
-        # collision detection
-
-
-
-
-        self.snakes = tmp_state.snakes
+        return tmp_state, eliminated_snakes
