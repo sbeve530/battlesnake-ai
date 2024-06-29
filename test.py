@@ -1,3 +1,4 @@
+import alpha_beta
 from simple_game_state import *
 
 test_game_state = {
@@ -40,10 +41,10 @@ test_game_state = {
                 "head": {"x": 2, "y": 5},
                 "length": 3,
                 "shout": "why are we shouting??",
-                "customizations":{
-                    "color":"#FF0000",
-                    "head":"pixel",
-                    "tail":"pixel"
+                "customizations": {
+                    "color": "#FF0000",
+                    "head": "pixel",
+                    "tail": "pixel"
                 }
             },
             {
@@ -59,10 +60,10 @@ test_game_state = {
                 "head": {"x": 2, "y": 2},
                 "length": 3,
                 "shout": "I'm not really sure...",
-                "customizations":{
-                    "color":"#26CF04",
-                    "head":"silly",
-                    "tail":"curled"
+                "customizations": {
+                    "color": "#26CF04",
+                    "head": "silly",
+                    "tail": "curled"
                 }
             },
             {
@@ -79,10 +80,10 @@ test_game_state = {
                 "head": {"x": 5, "y": 5},
                 "length": 4,
                 "shout": "I'm not really sure...",
-                "customizations":{
-                    "color":"#26CF04",
-                    "head":"silly",
-                    "tail":"curled"
+                "customizations": {
+                    "color": "#26CF04",
+                    "head": "silly",
+                    "tail": "curled"
                 }
             },
             {
@@ -98,10 +99,10 @@ test_game_state = {
                 "head": {"x": 5, "y": 6},
                 "length": 3,
                 "shout": "I'm not really sure...",
-                "customizations":{
-                    "color":"#26CF04",
-                    "head":"silly",
-                    "tail":"curled"
+                "customizations": {
+                    "color": "#26CF04",
+                    "head": "silly",
+                    "tail": "curled"
                 }
             },
         ]
@@ -120,17 +121,13 @@ test_game_state = {
         "length": 3,
         "shout": "why are we shouting??",
         "customizations": {
-            "color":"#FF0000",
-            "head":"pixel",
-            "tail":"pixel"
+            "color": "#FF0000",
+            "head": "pixel",
+            "tail": "pixel"
         }
     }
 }
 
 test_moves = [["snake-0", "up"], ["snake-1", "up"], ["snake-2", "left"], ["snake-3", "down"]]
 
-test_simple_game_state = SimpleGameState(test_game_state)
-
-successor = test_simple_game_state.next_state_2(test_moves)
-
-print("successor: " + str(successor.snakes))
+alpha_beta.alpha_beta_decision(test_game_state, 3)
