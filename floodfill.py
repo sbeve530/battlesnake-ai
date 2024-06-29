@@ -22,9 +22,37 @@ def floodfill(matrix, start):
   if matrix[x][y] != 0:
     return 0
 
-  stack = [(x,y)]
-  area = 0
-  visited = set()
+    stack = [(x,y)]
+    area = 0
+    visited = set()
+
+    while stack:
+        cx, cy = stack.pop()
+        if (cx, cy) in visited or cx < 0 or cx >= rows or cy < 0 or cy >= cols or matrix[cx][cy] != 0:
+            continue
+
+        visited.add((cx, cy))
+        area += 1
+
+        stack.append((cx+1, cy))
+        stack.append((cx-1, cy))
+        stack.append((cx, cy+1))
+        stack.append((cx, cy-1))
+
+
+    return area
+
+# so wird heuristik dann irgendwie in next_move integriert
+#
+# matrix = create_board(board, board['snakes'], board['hazards'])
+# max_area = -1
+# best move = "up"
+# for move in possible_moves:
+#         new_head = directions[move]
+#         area = flood_fill_battlesnake(matrix, new_head)
+#         if area > max_area:
+#             max_area = area
+#             best_move = move
 
 
 test_data = {
