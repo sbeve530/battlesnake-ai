@@ -131,6 +131,6 @@ test_moves = [["snake-0", "up"], ["snake-1", "up"], ["snake-2", "left"], ["snake
 
 test_simple_game_state = SimpleGameState(test_game_state)
 
-test_simple_game_state.next_state_2(test_moves)
+successor = test_simple_game_state.next_state_2(test_moves)
 
-print(test_simple_game_state.snakes)
+print("successor: " + str(successor.snakes))
