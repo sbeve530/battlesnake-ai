@@ -13,8 +13,9 @@
 import random
 import typing
 import copy
+import time
 
-from alpha_beta import *
+from alpha_beta import alpha_beta_decision
 
 
 # info is called when you create your Battlesnake on play.battlesnake.com
@@ -46,7 +47,10 @@ def end(game_state: typing.Dict):
 # Valid moves are "up", "down", "left", or "right"
 # See https://docs.battlesnake.com/api/example-move for available data
 def move(game_state: typing.Dict) -> typing.Dict:
+    start = time.time()
     next_move = alpha_beta_decision(game_state, 1)
+    end = time.time()
+    print(end - start)
     print(f"MOVE {game_state['turn']}: {next_move}")
     return next_move
 
