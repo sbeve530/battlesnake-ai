@@ -14,39 +14,7 @@ class SimpleGameState:
                        game_state["board"]["snakes"]]  # head is body with index 0
         self.foods = game_state["board"]["food"]
         self.player_id = game_state["you"]["id"]
-        self.is_temp = False
-
-    def copy(self):
-        new_state = SimpleGameState()
-        new_state.x_size = self.x_size
-        new_state.y_size = self.y_size
-        new_state.snakes = deepcopy(self.snakes)
-        new_state.foods = deepcopy(self.foods)
-        return new_state
-
-    def get_safe_moves(self, snake_index: int) -> list[str]:
-        """Returns a list of all  possible moves for a snake
-        :param snake_index: Index of the snake to get moves for
-        :return: A list of all possible moves for a snake"""
-        possible_moves = [
-            "up",
-            "down",
-            "left",
-            "right"
-        ]
-        snake_head = self.snakes[snake_index][1][0]
-        all_snake_bodies = [snake_cell for snake_cells in self.snakes for snake_cell in snake_cells[1]]
-
-        if snake_head["x"] == 0 or {"x": snake_head["x"] - 1, "y": snake_head["y"]} in all_snake_bodies:
-            possible_moves.remove("left")
-        if snake_head["x"] == self.x_size - 1 or {"x": snake_head["x"] + 1, "y": snake_head["y"]} in all_snake_bodies:
-            possible_moves.remove("right")
-        if snake_head["y"] == 0 or {"x": snake_head["x"], "y": snake_head["y"] - 1} in all_snake_bodies:
-            possible_moves.remove("down")
-        if snake_head["y"] == self.y_size - 1 or {"x": snake_head["x"], "y": snake_head["y"] + 1} in all_snake_bodies:
-            possible_moves.remove("up")
-
-        return possible_moves
+        self.player_has_grown = False # is always initialized with False, even when self is copied
 
     def next_state(self, moves: [[str, str]]):
         """Calculates next state given moves for all snakes.
@@ -91,6 +59,8 @@ class SimpleGameState:
                 new_state.foods.remove(food)
                 fed_snake[2] = 100
                 fed_snakes.append(fed_snake)
+                if fed_snake[0] == new_state.player_id:
+                    new_state.player_has_grown = True
         # TODO: possible, but very unlikely scenario: two snakes of same length on same food. No snake should grow and food should persist
 
         for snake in new_state.snakes:
@@ -98,7 +68,7 @@ class SimpleGameState:
                 snake[1].pop()
 
         # 4. elimination (eliminate starved or deserted snakes, check collisions, apply eliminations)
-        eliminated_snakes = []  # contains id's of eliminated snakes
+        eliminated_snakes = []  # contains eliminated snakes
         snake_heads = [[snake[0], snake[1][0], len(snake[1])] for snake in new_state.snakes]  # [id, pos, len]
         for snake in new_state.snakes:
             # out of bound, body and starvation collisions
@@ -132,3 +102,43 @@ class SimpleGameState:
             new_state.snakes.remove(eliminated_snake)
 
         return new_state
+
+    def get_player_index(self):
+        for index, snake in enumerate(self.snakes):
+            if snake[0] == self.player_id:
+                return index
+        return None
+
+    def copy(self):
+        new_state = SimpleGameState()
+        new_state.x_size = self.x_size
+        new_state.y_size = self.y_size
+        new_state.snakes = deepcopy(self.snakes)
+        new_state.foods = deepcopy(self.foods)
+        new_state.player_id = self.player_id
+        new_state.player_has_grown = False
+        return new_state
+
+    def get_safe_moves(self, snake_index: int) -> list[str]:
+        """Returns a list of all  possible moves for a snake
+        :param snake_index: Index of the snake to get moves for
+        :return: A list of all possible moves for a snake"""
+        possible_moves = [
+            "up",
+            "down",
+            "left",
+            "right"
+        ]
+        snake_head = self.snakes[snake_index][1][0]
+        all_snake_bodies = [snake_cell for snake_cells in self.snakes for snake_cell in snake_cells[1]]
+
+        if snake_head["x"] == 0 or {"x": snake_head["x"] - 1, "y": snake_head["y"]} in all_snake_bodies:
+            possible_moves.remove("left")
+        if snake_head["x"] == self.x_size - 1 or {"x": snake_head["x"] + 1, "y": snake_head["y"]} in all_snake_bodies:
+            possible_moves.remove("right")
+        if snake_head["y"] == 0 or {"x": snake_head["x"], "y": snake_head["y"] - 1} in all_snake_bodies:
+            possible_moves.remove("down")
+        if snake_head["y"] == self.y_size - 1 or {"x": snake_head["x"], "y": snake_head["y"] + 1} in all_snake_bodies:
+            possible_moves.remove("up")
+
+        return possible_moves

@@ -22,8 +22,7 @@ test_game_state = {
         "height": 11,
         "width": 11,
         "food": [
-            {"x": 2, "y": 6},
-            {"x": 0, "y": 0},
+            {"x": 2, "y": 6}
         ],
         "hazards": [
         ],
@@ -108,7 +107,7 @@ test_game_state = {
         ]
     },
     "you": {
-        "id": "snake-508e96ac-94ad-11ea-bb37",
+        "id": "snake-0",
         "name": "My Snake",
         "health": 100,
         "body": [
@@ -130,4 +129,5 @@ test_game_state = {
 
 test_moves = [["snake-0", "up"], ["snake-1", "up"], ["snake-2", "left"], ["snake-3", "down"]]
 
-alpha_beta.alpha_beta_decision(test_game_state, 3)
+move = alpha_beta.alpha_beta_decision(test_game_state, 1)
+print(move)
