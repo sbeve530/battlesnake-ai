@@ -119,7 +119,7 @@ class SimpleGameState:
         new_state.player_has_grown = False
         return new_state
 
-    def get_safe_moves(self, snake_index: int) -> list[str]:
+    def get_safe_moves(self, snake_index: int) -> [str]:
         """Returns a list of all  possible moves for a snake
         :param snake_index: Index of the snake to get moves for
         :return: A list of all possible moves for a snake"""
