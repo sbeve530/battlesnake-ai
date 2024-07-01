@@ -128,7 +128,15 @@ test_game_state = {
     }
 }
 
-test_moves = [["snake-0", "up"], ["snake-1", "up"], ["snake-2", "left"], ["snake-3", "down"]]
+test_moves_1 = [["snake-0", "up"], ["snake-1", "up"], ["snake-2", "left"], ["snake-3", "down"]]
+test_moves_2 = [["snake-0", "down"]] # player dies
+test_moves_3 = [["snake-0", "up"], ["snake-1", "right"], ["snake-2", "right"], ["snake-3", "up"]] # player wins
 
-move = alpha_beta.alpha_beta_decision(test_game_state, 2)
-print(move)
+state = SimpleGameState(test_game_state)
+move = test_moves_1
+#print(state.next_state(move))
+#print(alpha_beta.utility(state.next_state(move)))
+
+
+#foo = alpha_beta.alpha_beta_decision(test_game_state, 2)
+#print(foo)

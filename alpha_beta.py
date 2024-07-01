@@ -50,7 +50,7 @@ def alpha_beta_decision(game_state: Dict, depth: int) -> Dict:
     return {"move": best_move} if best_move else {"move": "down"}
 
 
-def min_value_2(current_game_state: SimpleGameState, depth: int) -> float:
+def min_value_2(current_game_state: SimpleGameState, depth: int) -> float: # TODO
     """"""
     if depth < 1 or is_terminal(current_game_state):
         return utility(current_game_state)
@@ -113,22 +113,24 @@ def snakes_moves_cartesian(moves_per_snake: list):
     return combinations
 
 
-def utility(simplified_game_state: SimpleGameState) -> float:
+def utility(game_state: SimpleGameState) -> float:
     """Calculates the utility value of a given game state.
     The utility value greater the closer food is.
-    :param simplified_game_state: SimpleGameState object
-    :return: utility value of the game state. Returns -inf if player is dead.
+    :param game_state: SimpleGameState object
+    :return: utility value of the game state. Returns -inf if player is dead, inf if player wins, float otherwise.
     """
-    if simplified_game_state == []:
+    if game_state == []:
         return -math.inf
-    utility_value = 0
+    elif len(game_state.snakes) == 1 and game_state.snakes[0][0] == game_state.player_id:
+        return math.inf
 
+    utility_value = 0
     my_head = next(
-        snake[1][0] for snake in simplified_game_state.snakes if snake[0] == simplified_game_state.player_id)
+        snake[1][0] for snake in game_state.snakes if snake[0] == game_state.player_id)
     min_distance = math.inf
-    if simplified_game_state.player_has_grown == True:
+    if game_state.player_has_grown == True:
         utility_value += 100
-    for food in simplified_game_state.foods:
+    for food in game_state.foods:
         distance = food_distance(my_head, food)
         if distance < min_distance:
             min_distance = distance
@@ -140,6 +142,8 @@ def utility(simplified_game_state: SimpleGameState) -> float:
     # - get food until bigger than every other snake (hunting and collecting mode)
     # - avoid map boarders
     # - avoid inner spirals (no three same turns in a row)
+    # - avoid areas smaller than self
+    # - prioritize food based on hea;th
     # - lock off map when longer than 11
     # - floodfill evidence / provocation
     # - circle food
@@ -148,7 +152,12 @@ def food_distance(head_pos, food_pos) -> float:
     return abs(head_pos["x"] - food_pos["x"]) + abs(head_pos["y"] - food_pos["y"])
 
 
-def is_terminal(simplified_game_state: SimpleGameState) -> bool:
-    if simplified_game_state == []:
+def is_terminal(game_state: SimpleGameState) -> bool:
+    """checks if the game state is terminal.
+    :param game_state: The game state to check.
+    :return: True if the game state is terminal, False otherwise."""
+    if game_state  == []:
+        return True
+    elif (len(game_state.snakes) == 1 and game_state.snakes[0][0] == game_state.player_id):
         return True
     return False
