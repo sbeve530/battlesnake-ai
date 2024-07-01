@@ -18,6 +18,7 @@ def alpha_beta_decision(game_state: Dict, depth: int) -> Dict:
     """
     if depth < 1:
         return {"move": "down"}
+    
     initial_state = SimpleGameState(game_state)
     player_index = initial_state.get_player_index()
     beta = math.inf
@@ -34,36 +35,46 @@ def alpha_beta_decision(game_state: Dict, depth: int) -> Dict:
 
     # for each possible move of player, get min of all following paths
     for safe_move in initial_state.get_safe_moves(player_index):
-        #print(safe_move)
         cartesian = snakes_moves_cartesian(all_moves_each_np_snake)
         for move_list in cartesian:
             foobar = math.inf
             move_list.insert(0, [initial_state.player_id, safe_move])  # insert player move to cartesian
-            #print("\t" + str(move_list))
             successor_state = initial_state.next_state(move_list)
             foo = utility(successor_state)
             if foo < foobar:
                 foobar = foo
-            #print("\t" + str(foo))
         if foobar > best_value:
             best_value = foobar
             best_move = safe_move
 
-    # for move_list in snakes_moves_cartesian(all_moves_each_snake):
-    #    next_state = initial_state.next_state(move_list)
-    # value = min_value(next_state, alpha, beta, depth - 1)
-    #    value = utility(next_state)
-    #    if value > best_value:
-    #        best_value = value
-    #        best_move = move_list.filter(lambda move: move[0] == initial_state.player_id)
-
-    # for moves, new_state in initial_state.next_state():
-    #    value = min_value(new_state, alpha, beta, depth - 1)
-    #    if value > best_value:
-    #        best_value = value
-    #        best_move = moves[0]
-
     return {"move": best_move} if best_move else {"move": "down"}
+
+
+def min_value_2(current_game_state: SimpleGameState, depth: int) -> float:
+    """"""
+    if depth < 1 or is_terminal(current_game_state):
+        return utility(current_game_state)
+    player_index = current_game_state.get_player_index()
+    value = math.inf
+    _all_moves_np_snakes = all_moves_np_snakes(current_game_state)
+    for safe_move in current_game_state.get_safe_moves(player_index):
+        value_3 = math.inf
+        cartesian = snakes_moves_cartesian(_all_moves_np_snakes)
+        for move_list in cartesian:
+            next_state = current_game_state.next_state(move_list)
+            value_2 = min_value_2(next_state, depth - 1)
+            if value_2 < value:
+                value = value_2
+    return value
+
+
+def all_moves_np_snakes(game_state: SimpleGameState):
+    """Calculates all possible safe move combinations for all non-player snakes.
+    :param game_state: The game state to calculate the best move for.
+    :return: A list of all possible safe move combinations."""
+    return [[[snake[0], move] for move in game_state.get_safe_moves(snake_index)] for
+            snake_index, snake in enumerate(game_state.snakes) if
+            snake[0] != game_state.player_id]
 
 
 def max_value(simplified_game_state, alpha, beta, depth) -> float:  # TODO: adapt to simple_game_state.py
@@ -90,22 +101,6 @@ def min_value(current_game_state: SimpleGameState, alpha, beta, depth) -> float:
     #        return value
 
     return value
-
-
-# Utility function to evaluate game state based on the sum of the inverses of the distances to the food sources
-# def utility(game_state: Dict) -> float:  # TODO: adapt to simple_game_state.py; improve heuristic
-#    utility_value = 0
-#    my_head = game_state["you"]["body"][0]
-#    food_sources = game_state["board"]["food"]
-#    total_inverse_distance = 0
-#    for food in food_sources:
-#        distance = abs(my_head["x"] - food["x"]) + abs(my_head["y"] - food["y"])
-#        if distance != 0:
-#            total_inverse_distance += 1 / distance
-#        else:
-#            utility_value += 3
-#    utility_value += total_inverse_distance / len(food_sources)
-#    return utility_value
 
 
 def snakes_moves_cartesian(moves_per_snake: list):
@@ -139,13 +134,20 @@ def utility(simplified_game_state: SimpleGameState) -> float:
             min_distance = distance
     utility_value += 1 / min_distance
     return utility_value
-
+    ###
+    # ideas:
+    # - approach smaller snakes, avoid bigger snakes
+    # - get food until bigger than every other snake (hunting and collecting mode)
+    # - avoid map boarders
+    # - avoid inner spirals (no three same turns in a row)
+    # - lock off map when longer than 11
+    # - floodfill evidence / provocation
+    # - circle food
 
 def food_distance(head_pos, food_pos) -> float:
     return abs(head_pos["x"] - food_pos["x"]) + abs(head_pos["y"] - food_pos["y"])
 
 
-# TODO: check if next_state returns []
 def is_terminal(simplified_game_state: SimpleGameState) -> bool:
     if simplified_game_state == []:
         return True
