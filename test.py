@@ -1,5 +1,4 @@
-import alpha_beta
-from simple_game_state import *
+from alpha_beta import alpha_beta_new, simple_game_state_new
 
 test_game_state = {
     "game": {
@@ -65,46 +64,7 @@ test_game_state = {
                     "head": "silly",
                     "tail": "curled"
                 }
-            },
-            {
-                "id": "snake-2",
-                "name": "Another Snake",
-                "health": 100,
-                "body": [
-                    {"x": 6, "y": 5},
-                    {"x": 7, "y": 5},
-                    {"x": 8, "y": 5},
-                    {"x": 9, "y": 5}
-                ],
-                "latency": "222",
-                "head": {"x": 5, "y": 5},
-                "length": 4,
-                "shout": "I'm not really sure...",
-                "customizations": {
-                    "color": "#26CF04",
-                    "head": "silly",
-                    "tail": "curled"
-                }
-            },
-            {
-                "id": "snake-3",
-                "name": "Another Snake",
-                "health": 100,
-                "body": [
-                    {"x": 5, "y": 6},
-                    {"x": 5, "y": 7},
-                    {"x": 5, "y": 8}
-                ],
-                "latency": "222",
-                "head": {"x": 5, "y": 6},
-                "length": 3,
-                "shout": "I'm not really sure...",
-                "customizations": {
-                    "color": "#26CF04",
-                    "head": "silly",
-                    "tail": "curled"
-                }
-            },
+            }
         ]
     },
     "you": {
@@ -128,15 +88,8 @@ test_game_state = {
     }
 }
 
-test_moves_1 = [["snake-0", "up"], ["snake-1", "up"], ["snake-2", "left"], ["snake-3", "down"]]
-test_moves_2 = [["snake-0", "down"]] # player dies
-test_moves_3 = [["snake-0", "up"], ["snake-1", "right"], ["snake-2", "right"], ["snake-3", "up"]] # player wins
+player_move = "up"
+opponent_move = "up"
 
-state = SimpleGameState(test_game_state)
-move = test_moves_1
-#print(state.next_state(move))
-#print(alpha_beta.utility(state.next_state(move)))
-
-
-#foo = alpha_beta.alpha_beta_decision(test_game_state, 2)
-#print(foo)
+state = simple_game_state_new.SimpleGameState(test_game_state)
+successor = state.simulate_moves(player_move, opponent_move)
