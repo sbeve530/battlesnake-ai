@@ -1,7 +1,8 @@
 import math
 import random
 
-from simple_game_state import *
+from alpha_beta import is_terminal
+from simple_game_state import SimpleGameState
 
 
 class Node:
@@ -36,4 +37,5 @@ def expand_node(node):
     return random.choice(node.children) if node.children else node
 
 def simulate(state: SimpleGameState):
+    while not is_terminal(state):
 
