@@ -15,21 +15,21 @@ def mcts(state: SimpleGameState, samples_per_move: int, max_sample_depth: int) -
     if safe_moves == []: # catch exception
         return "down"  # default
 
-    print(safe_moves)
+    #print(safe_moves)
     move_ratings = []
 
     for move in safe_moves:
         outcomes = []
         for sample in range(samples_per_move):
             outcomes.append(get_outcome(state, move, max_sample_depth))
-        print("move: " + str(move) + ", sample outcomes: " + str(outcomes))
+        #print("move: " + str(move) + ", sample outcomes: " + str(outcomes))
 
         wins = outcomes.count(1)
         losses = outcomes.count(-1)
-        draws = outcomes.count(0)
+        #draws = outcomes.count(0)
 
         move_ratings.append(wins - losses)
-    print(move_ratings)
+    #print(move_ratings)
     return safe_moves[max(enumerate(move_ratings), key=lambda x: x[1])[0]]
 
 
