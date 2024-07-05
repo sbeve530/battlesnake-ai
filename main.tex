@@ -1,0 +1,254 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Intro to LaTeX and Template for Homework Assignments
+%% Quantitative Methods in Political Science
+%% University of Mannheim
+%% Fall 2017
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% created by Marcel Neunhoeffer & Sebastian Sternberg
+
+
+% This template and tutorial will help you to write up your homework. It will also help you to use Latex for other assignments than this course's homework.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Before we get started
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Make an account on overleaf.com and get started. No need to install anything.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Or if you want it the nerdy way...
+% INSTALL LATEX: Before we can get started you need to install LaTeX on your computer.
+				% Windows: http://miktex.org/download
+				% Mac:         http://www.tug.org/mactex/mactex-download.html	
+				% There a many more different LaTeX editors out there for both operating systems. I use TeXworks because it looks the same on Windows and Mac.
+				
+
+% SAVE THE FILE: The first thing you need to do is to save your LaTeX file in a directory as a .tex file. You will not be able to do anything else unless your file is saved. I suggest to save the .tex file in the same folder with your .R script and where you will save your plots from R to. Let's call this file template_homework1.tex and save it in your Week 1 folder.
+
+
+% COMPILE THE FILE: After setting up your file, using your LaTeX editor (texmaker, texshop), you can compile your document using PDFLaTeX.
+	% Compiling your file tells LaTeX to take the code you have written and create a pdf file
+	% After compiling your file, in your directory will appear four new files, including a .pdf file. This is your output document.
+	% It is good to compile your file regularly so that you can see how your code is translating into your document.
+	
+	
+% ERRORS: If you get an error message, something is wrong in your code. Fix errors before they pile up!
+	% As with error messages in R, google the exact error message if you have a question!
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+% Now again for everyone...
+
+% COMMANDS: 
+	% To do anything in LaTeX, you must use commands
+	% Commands tell LaTeX when to start your document, how you want your document to look, and how to format your document
+	% Commands ALWAYS begin with a backslash \
+
+% Everything following the % sign is a comment and will not be used by Latex to compile your document.
+% This is very similar to # comments in R.
+
+% Every .tex file usually consists of four parts.
+% 1. Document Class
+% 2. Packages
+% 3. Header
+% 4. Your Document
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 1. Document Class
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ 
+ % The first command you will always have will declare your document class. This tells LaTeX what type of document you are creating (article, presentation, poster, etc). 
+% \documentclass is the command
+% in {} you specify the type of document
+% in [] you define additional parameters
+ 
+\documentclass[a4paper,12pt]{article} % This defines the style of your paper
+
+% We usually use the article type. The additional parameters are the format of the paper you want to print it on and the standard font size. For us this is a4paper and 12pt.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 2. Packages
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Packages are libraries of commands that LaTeX can call when compiling the document. With the specialized commands you can customize the formatting of your document.
+% If the packages we call are not installed yet, TeXworks will ask you to install the necessary packages while compiling.
+
+% First, we usually want to set the margins of our document. For this we use the package geometry. We call the package with the \usepackage command. The package goes in the {}, the parameters again go into the [].
+\usepackage[top = 2.5cm, bottom = 2.5cm, left = 2.5cm, right = 2.5cm]{geometry} 
+
+% Unfortunately, LaTeX has a hard time interpreting German Umlaute. The following two lines and packages should help. If it doesn't work for you please let me know.
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+
+% Custom Mathpackage
+\usepackage{amsfonts}
+% Custom Mathpackage with command for uppercase roman numerals 
+\usepackage{amsmath}
+\newcommand{\RN}[1]{%
+  \textup{\uppercase\expandafter{\romannumeral#1}}%
+}
+% For $\text{}$
+\usepackage{amstext}
+% Package for scaling symbols
+\usepackage{relsize}
+% Package for enumeration with letters
+\usepackage{enumitem}
+% Package for QED symbol
+\usepackage{amsthm}
+
+
+% The following two packages - multirow and booktabs - are needed to create nice looking tables.
+\usepackage{multirow} % Multirow is for tables with multiple rows within one cell.
+\usepackage{booktabs} % For even nicer tables.
+
+% As we usually want to include some plots (.pdf files) we need a package for that.
+\usepackage{graphicx} 
+
+% The default setting of LaTeX is to indent new paragraphs. This is useful for articles. But not really nice for homework problem sets. The following command sets the indent to 0.
+\usepackage{setspace}
+\setlength{\parindent}{0in}
+
+% Package to place figures where you want them.
+\usepackage{float}
+
+% The fancyhdr package let's us create nice headers.
+\usepackage{fancyhdr}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 3. Header (and Footer)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% To make our document nice we want a header and number the pages in the footer.
+
+\pagestyle{fancy} % With this command we can customize the header style.
+
+\fancyhf{} % This makes sure we do not have other information in our header or footer.
+
+\lhead{\footnotesize Künstliche Intelligenz (Modul: Smart Computing): Aufgabe 4}% \lhead puts text in the top left corner. \footnotesize sets our font to a smaller size.
+
+%\rhead works just like \lhead (you can also use \chead)
+\rhead{\footnotesize Projektgruppe 17} %<---- Fill in your lastnames.
+
+% Similar commands work for the footer (\lfoot, \cfoot and \rfoot).
+% We want to put our page number in the center.
+\cfoot{\footnotesize \thepage} 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 4. Your document
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Now, you need to tell LaTeX where your document starts. We do this with the \begin{document} command.
+% Like brackets every \begin{} command needs a corresponding \end{} command. We come back to this later.
+
+\begin{document}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Title section of the document
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% For the title section we want to reproduce the title section of the Problem Set and add your names.
+
+\thispagestyle{empty} % This command disables the header on the first page. 
+
+\begin{tabular}{p{15.5cm}} % This is a simple tabular environment to align your text nicely 
+{\large \bf Künstliche Intelligenz (Modul: Smart Computing)} \\
+Universität Rostock \\ Sommersemester 2024  \\ Prof. Dr.-Ing. Thomas Kirste\\
+\hline % \hline produces horizontal lines.
+\\
+\end{tabular} % Our tabular environment ends here.
+
+\vspace*{0.3cm} % Now we want to add some vertical space in between the line and our title.
+
+\begin{center} % Everything within the center environment is centered.
+	{\Large \bf PV: Theorieteil} % <---- Don't forget to put in the right number
+	\vspace{2mm}
+	
+        % YOUR NAMES GO HERE
+	{\bf Projektgruppe 17} % <---- Fill in your names here!
+		
+\end{center}  
+
+\vspace{0.4cm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Up until this point you only have to make minor changes for every week (Number of the homework). Your write up essentially starts here.
+
+
+%%%%%%%%%%%%%%%%%
+%%% AUFGABE 4
+%%%%%%%%%%%%%%%%%
+\section*{Aufgabe 4:}
+
+\textbf{Aufbau:}\\
+Ziel des Spiels ist es eine KI zu programmieren, die durch ihre Fähigkeit länger als alle anderen Schlangen in der Partie zu bleiben gewinnt. Eine Battlesnake Partie wird erstellt durch Auswahl eines Spielmodus, der Größe der verwendeten rechteckigen Spielfläche und einer Selektion von bis zu acht KI-Schlangen, die sich auf ihrer Gitterstruktur bewegen werden. An dieser Stelle wird sich auf die Beschreibung der Eigenschaften und Regeln des Standardmodus beschränkt.\\
+Zu beginn der Runde wird jede Schlange in ihrer Gänze auf einer der acht festgelegten Startpositionen platziert. Diese sind so angeordnet, dass die Manhattan-Distanz zwischen zwei beliebigen Positionen immer gerade ist. Durch diese Anforderung wird gewährleistet, dass im Spielverlauf jeder Kopf mit jedem anderen Kopf kollidieren kann. Damit zusätzlich eine gleichmäßige Verteilung möglich ist, muss die Seitenlänge der Spielfläche ungerade ($\geq 5$) sein. Die Auswahl wurde auf drei Größen beschränkt: 7x7, 11x11, 19x19. Jeder Schlange gehört eine Nahrungsanzeige (Wert von 0 bis 100) an, die zu Beginn aufgefüllt ist. Abschließend werden Nahrungseinheiten ungefähr gleichmäßig im Verhältnis zu der Anzahl der erzeugten Schlangen platziert, womit das Spiel vollständig aufgebaut ist.\\
+\\
+\textbf{Ablauf einer Partie:}\\
+Schlangen sind gezwungen sich zu jedem Spielzug in eine von vier Himmelsrichtungen zu bewegen und scheiden aus der Partie unter zwei Bedingungen aus: ihr Nahrungswert fällt auf null oder ihr Kopf kollidiert mit einem Hindernis. Es gibt zwei Hindernistypen: die Umrandung der Spielfläche und Schlangen. Somit kann ein Ausscheiden auch durch Eigenkollision herbeigeführt werden. Bei der Kollision von zwei Kopfsegmenten tritt eine Sonderregel in Kraft: die kürzere von beiden Schlangen scheidet aus (bei gleicher Länge scheiden beide aus). Durch Kollision mit Nahrung wird die Nahrungsanzeige vollständig aufgefüllt und durch jeden Schritt um eins verringert.\\
+\\
+\textbf{Ablauf eines Spielzuges:}\\
+Jeder Schlange werden sämtliche Informationen des Spielstatus übertragen (Objektpositionen, Nahrungswerte aller Schlangen, ...). Den Servern wird eine begrenzte Zeit gewährt ihren nächsten Schritt zu berechnen und zu übertragen. Falls dies nicht rechtzeitig geschieht, wird die jeweilige Schlange in die Richtung bewegt, in die sie sich in dem letzten Zug bewegt hat (nach Unten, falls erster Zug). Generell erfolgt der Zugzwang 500 Millisekunden nach Versenden des Spielstatuses.\\
+Der Spielstatus wird für alle Schlangen gleichzeitig aktualisiert:
+\begin{itemize}
+    \item Schlangenpositionen anpassen: 
+    \begin{itemize}
+        \item Kopf an neuer Position erzeugen
+        \item alten Kopf zu normalem Körpersegment ändern
+        \item Schwanzspitze entfernen (falls sich keine Körpersegmente überlagern)
+        \item Nahrungswert -= 1
+    \end{itemize}
+    \item alle Schlangen auf Nahrungsfeldern essen:
+    \begin{itemize}
+        \item Nahrugnswert auf 100 setzen
+        \item neues Körpersegment über Schwanzspitze platzieren
+        \item Nahrung entfernen
+    \end{itemize}
+    \item kollidierte / verhungerte (Nahrungsw. == 0) Schlangen entfernen
+\end{itemize}
+\\
+\textbf{Sensoren/Aktuatoren:}\\
+Battlesnake ist ein Spiel, an dem bis zu acht Agenten gleichzeitig teilnehmen können. Auch wenn Agenten im eigentlichen durch ihre Agentenfunktion definiert sind, lassen sich diese hier im Sinne der Spiels ohne Beschränkung der Allgemeinheit mit ihren Schlangenköpfen gleichsetzen. Jeder Agent verfügt über ein global state eye, was bedeutet, dass sie vollständige Kenntnis über den "Schnappschuss" der aktuellen Spielsituation besitzen. Die Richtung, die sie an das Spiel übertragen, ist ihr einziger Aktuator und somit ihre einzige Möglichkeit die Spielumgebung zu beeinflussen. Da das Genick der Schlange stets eine der vier Richtungen blockiert (außer am Anfang), lässt sich die Entscheidung des Spielzugs auf drei Möglichkeiten reduzieren.\\
+\\
+\textbf{Umgebung:}\\
+Die Spielumgebung ist:
+\begin{itemize}
+    \item vollständig observabel $\Longleftrightarrow$ global state eye
+    \item nicht-deterministisch:
+    \begin{itemize}
+        \item Handlung anderer Agenten
+        \item Spawnfrequenz und -verteilung der Nahrung
+    \end{itemize}
+    \item sequentiell:
+    \begin{itemize}
+        \item Muster im Verhalten anderer Agenten
+        \item $\longrightarrow$ Gewichtung berechneter Zustandsräume
+    \end{itemize}
+    \item statisch: Agentenaktuatoren werden simultan ausgewertet
+    \item diskret: ca. 500ms Stillstand vor sofortiger Bewegungsaktualisierung
+    \item Multi-Agenten im Wettbewerbssituation
+\end{itemize}
+
+Agenten können sich einen Vorteil verschaffen, indem auf das wahrscheinlichste Verhalten anderer Schlange spekuliert wird. Es lässt sich mit Sicherheit ausschließen, dass sich unter den Schlangen einfache (ernstzunehmende) Reflexagenten befinden, da die Anzahl möglicher Spielzustände zu groß ist. Bei Zustandsbehafteten Reflex-Agenten lassen sich bereits Muster herauslesen. Zum Beispiel laufen Schlangen möglicherweise nie unmittelbar in Hindernisse oder bewegen sich immer zur nächsten Nahrungsquelle. Vielleicht ändert sich auch das Verhalten von Schlangen, wenn eine aggressivere Spielweise eingeschlagen wird. Bereits damit lässt sich der zu berechnende Zustandsbaum verkleinern bzw. gewichten. Somit fließt ein Explorationsproblem in die Nutzenfunktion ein.\\
+\\
+\textbf{Nutzen:}\\
+Da das Ziel von Battlesnake generell nicht das Gewinnen von einzelnen Partien ist, sondern das Erklimmen einer Rangliste (bzw. ähnlich in Turnierformaten), entscheidet ein rationaler Agent bei Zurateziehen einer guten Nutzenfunktion nicht, welcher Zug die Gewinnchance maximiert, sondern welcher Zug den Erwartungswert für den Punktestand maximiert. Dies gilt natürlich nicht, falls Ranglistenpunkte nicht gestaffelt nach Reihenfolge des Ausscheidens vergeben oder Turnierformate mit Soforteliminierung ausgetragen werden. Variablen die in die Nutzenfunktionen einfließen können sind zum Beispiel:
+\begin{itemize}
+    \item Anzahl der Gegner
+    \item Bewegungsfreiraum
+    \item Nahrungsspawnrate
+    \item Länge
+    \item Länge in Relation zu Anderen
+    \item wahrscheinliche / unwahrscheinliche Gegneraktionen (Zustandswahrscheinlichkeit)
+    \item Ping
+\end{itemize}
+\end{document}
