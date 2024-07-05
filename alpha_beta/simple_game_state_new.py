@@ -12,7 +12,9 @@ class SimpleGameState:
         self.foods = game_state["board"]["food"]
         opponent_index = [index for index, snake in enumerate(game_state["board"]["snakes"]) if
              snake["id"] != game_state["you"]["id"]][0]
-        self.player = Snake(game_state["you"]["id"], game_state["you"]["body"], game_state["you"]["health"],
+        self.player = Snake(game_state["you"]["id"],
+                            game_state["you"]["body"],
+                            game_state["you"]["health"],
                             game_state["you"]["head"])
         self.opponent = Snake(game_state["board"]["snakes"][opponent_index]["id"],
                               game_state["board"]["snakes"][opponent_index]["body"],
@@ -81,8 +83,48 @@ class SimpleGameState:
         new_state.opponent = deepcopy(self.opponent)
         return new_state
 
+    def safe_moves(self, snake: Snake) -> [str]:
+        """Returns all possible moves for given snake.
+        :param snake: Snake to get moves for (player or opponent)
+        :return: all possible moves for given snake"""
+        possible_moves = [
+            "up",
+            "down",
+            "left",
+            "right"
+        ]
+        target_head = snake.head
+        bodies = self.player.body + self.opponent.body
+
+        if target_head["x"] == 0 or {"x": target_head["x"] - 1, "y": target_head["y"]} in bodies:
+            possible_moves.remove("left")
+        if target_head["x"] == self.x_size - 1 or {"x": target_head["x"] + 1, "y": target_head["y"]} in bodies:
+            possible_moves.remove("right")
+        if target_head["y"] == 0 or {"x": target_head["x"], "y": target_head["y"] - 1} in bodies:
+            possible_moves.remove("down")
+        if target_head["y"] == self.y_size - 1 or {"x": target_head["x"], "y": target_head["y"] + 1} in bodies:
+            possible_moves.remove("up")
+
+        return possible_moves
+
+
     def is_terminal(self):
         """Checks if the game state is terminal.
         :return: True if the game state is terminal, False otherwise"""
         if self.player.is_alive == False or self.opponent.is_alive == False:
             return True
+
+
+    def eval(self):
+        """
+        Utility function for evaluating a game state.
+        :return: the value of the game state
+        """
+        if self.player.is_alive == False:
+            return -float('inf')
+        if self.opponent.is_alive == False:
+            return float('inf')
+        if self.player.health == 100:
+            return 100
+        else:
+            return 0

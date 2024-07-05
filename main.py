@@ -15,7 +15,8 @@ import typing
 import copy
 import time
 
-from alpha_beta import alpha_beta_decision
+from alpha_beta.alpha_beta_new import alpha_beta
+from alpha_beta.simple_game_state_new import SimpleGameState
 
 
 # info is called when you create your Battlesnake on play.battlesnake.com
@@ -48,12 +49,12 @@ def end(game_state: typing.Dict):
 # See https://docs.battlesnake.com/api/example-move for available data
 def move(game_state: typing.Dict) -> typing.Dict:
     start = time.time()
-    next_move = alpha_beta_decision(game_state, 1)
+    state = SimpleGameState(game_state)
+    next_move = alpha_beta(state, 4)
     end = time.time()
     print(end - start)
     print(f"MOVE {game_state['turn']}: {next_move}")
-    return next_move
-
+    return {"move": next_move}
 
 # Start server when `python main.py` is run
 if __name__ == "__main__":
@@ -62,6 +63,6 @@ if __name__ == "__main__":
     run_server({
         "info": info, 
         "start": start, 
-         "move": move, 
+        "move": move,
         "end": end
     })

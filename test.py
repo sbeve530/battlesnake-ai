@@ -1,3 +1,5 @@
+import time
+
 from alpha_beta import alpha_beta_new, simple_game_state_new
 
 test_game_state = {
@@ -88,8 +90,12 @@ test_game_state = {
     }
 }
 
-player_move = "up"
-opponent_move = "up"
-
+start = time.time()
 state = simple_game_state_new.SimpleGameState(test_game_state)
-successor = state.simulate_moves(player_move, opponent_move)
+
+move = alpha_beta_new.alpha_beta(state, 11)
+end = time.time()
+
+print(move)
+
+print(end - start, "s")
