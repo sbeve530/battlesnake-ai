@@ -15,7 +15,9 @@ class Snake:
     def add_new_head(self, move):
         """Adds a new head to the snake according to the move.
         :param move: The move for where to add the head."""
-        if not move: move = "down"
+        #if not move: move = "down"
+        if not move:
+            return
 
         if move == "left":
             self.head["x"] -= 1
@@ -26,7 +28,7 @@ class Snake:
         elif move == "down":
             self.head["y"] -= 1
 
-        self.body.insert(0, self.head)
+        self.body.insert(0, self.head.copy())
 
     def reduce_health(self, amount):
         """Reduces the health of the snake by the given amount.

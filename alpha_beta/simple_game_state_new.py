@@ -1,5 +1,5 @@
 from copy import deepcopy
-
+from typing import Dict
 from alpha_beta.snake import Snake
 
 
@@ -27,6 +27,12 @@ class SimpleGameState:
         :param opponent_move: opponent move
         :return: a new game state"""
         new_state = self.copy()
+        if player_move == None:
+            print("choose default")
+            player_move = "down"
+        if opponent_move == None:
+            print("choose default")
+            opponent_move = "down"
 
         # add new heads
         new_state.player.add_new_head(player_move)
@@ -86,23 +92,23 @@ class SimpleGameState:
     def safe_moves(self, snake: Snake) -> [str]:
         """Returns all possible moves for given snake.
         :param snake: Snake to get moves for (player or opponent)
-        :return: all possible moves for given snake"""
+        :return: all possible moves for given snake, None if no moves are possible"""
         possible_moves = [
             "up",
             "down",
             "left",
             "right"
         ]
-        target_head = snake.head
+        head = snake.head
         bodies = self.player.body + self.opponent.body
 
-        if target_head["x"] == 0 or {"x": target_head["x"] - 1, "y": target_head["y"]} in bodies:
+        if head["x"] == 0 or {"x": head["x"] - 1, "y": head["y"]} in bodies:
             possible_moves.remove("left")
-        if target_head["x"] == self.x_size - 1 or {"x": target_head["x"] + 1, "y": target_head["y"]} in bodies:
+        if head["x"] == self.x_size - 1 or {"x": head["x"] + 1, "y": head["y"]} in bodies:
             possible_moves.remove("right")
-        if target_head["y"] == 0 or {"x": target_head["x"], "y": target_head["y"] - 1} in bodies:
+        if head["y"] == 0 or {"x": head["x"], "y": head["y"] - 1} in bodies:
             possible_moves.remove("down")
-        if target_head["y"] == self.y_size - 1 or {"x": target_head["x"], "y": target_head["y"] + 1} in bodies:
+        if head["y"] == self.y_size - 1 or {"x": head["x"], "y": head["y"] + 1} in bodies:
             possible_moves.remove("up")
 
         return possible_moves
@@ -114,6 +120,13 @@ class SimpleGameState:
         if self.player.is_alive == False or self.opponent.is_alive == False:
             return True
 
+    def eval_terminal(self):
+        if self.player.is_alive == self.opponent.is_alive:
+            return 0
+        elif self.player.is_alive == False:
+            return -1
+        else:
+            return 1
 
     def eval(self):
         """
@@ -128,3 +141,33 @@ class SimpleGameState:
             return 100
         else:
             return 0
+
+    def print_state(self):
+        board = []
+        print("+ " + "- " * self.x_size + "+")
+        for y in range(self.y_size):
+            row = ['| ']
+            for x in range(self.x_size):
+                row.append('  ')
+            row.append('|')
+            board.append(row)
+
+
+        for s in self.player.body:
+            board[s["y"]][s["x"]] = 'x '
+        board[self.player.head["y"]][self.player.head["x"]] = 'X '
+
+        for s in self.opponent.body:
+            board[s["y"]][s["x"]] = 'o '
+        board[self.opponent.head["y"]][self.opponent.head["x"]] = 'O '
+
+        for f in self.foods:
+            board[f["y"]][f["x"]] = 'F '
+
+        board.reverse()
+        for r in board:
+            s = ""
+            for c in r:
+                s += c
+            print(s)
+        print("+ " + "- " * self.x_size + "+")

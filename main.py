@@ -17,6 +17,7 @@ import time
 
 from alpha_beta.alpha_beta_new import alpha_beta
 from alpha_beta.simple_game_state_new import SimpleGameState
+from alpha_beta.mcts import mcts
 
 
 # info is called when you create your Battlesnake on play.battlesnake.com
@@ -50,7 +51,7 @@ def end(game_state: typing.Dict):
 def move(game_state: typing.Dict) -> typing.Dict:
     start = time.time()
     state = SimpleGameState(game_state)
-    next_move = alpha_beta(state, 1)
+    next_move = mcts(state, 10, 16)
     end = time.time()
     print(end - start)
     print(f"MOVE {game_state['turn']}: {next_move}")

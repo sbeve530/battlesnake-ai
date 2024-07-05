@@ -8,8 +8,11 @@ def alpha_beta(state: SimpleGameState, cutoff_depth) -> str:
     :returns: next move (can be {"up", "down", "left", "right"})
 
     """
+    print("initial state")
+    state.print_state()
+
     safe_moves = state.safe_moves(state.player)
-    min_values = [min_value(state.simulate_moves(safe_move, None), -float('inf'), float('inf'), cutoff_depth) for safe_move in safe_moves]
+    min_values = [min_value(state.simulate_moves(safe_move, None), -float('inf'), float('inf'), cutoff_depth, safe_move) for safe_move in safe_moves]
 
     print("moves: " + str(safe_moves))
     print("min_values: " + str(min_values))
@@ -26,40 +29,40 @@ def max_value(state: SimpleGameState, alpha: float, beta: float, depth) -> float
     """
     if state.is_terminal() or depth <= 0:
         return state.eval()
-    v = -float('inf')
+    v = float('-inf')
     for move in state.safe_moves(state.player):
-        s = state.copy()
-        s.simulate_moves(move, None)
+        s = state.simulate_moves(move, None)
 
-        #print(("\t") * depth + "player move: " + str(move))
-        #print(("\t") * depth + "player: " + str(s.player.body))
-        #print(("\t") * depth + "opponent: " + str(s.opponent.body))
+        s.print_state()
+        print(("\t") * depth + "player move: " + str(move))
+        print(("\t") * depth + "player: " + str(s.player.body))
+        print(("\t") * depth + "opponent: " + str(s.opponent.body))
 
-        v = max(v, min_value(s, alpha, beta, depth-1))
+        v = max(v, min_value(state, alpha, beta, depth-1, player_move=move))
 
-        #print(("\t")*depth + str(v))
+        print(("\t")*depth + str(v))
 
         if v >= beta:
             return v
         alpha = max(alpha, v)
     return v
 
-def min_value(state: SimpleGameState, alpha: float, beta: float, depth) -> float:
+def min_value(state: SimpleGameState, alpha: float, beta: float, depth, player_move) -> float:
     """computes value for best move for opponent"""
     if state.is_terminal() or depth <= 0:
         return state.eval()
     v = float("inf")
     for move in state.safe_moves(state.opponent):
-        s = state.copy()
-        s.simulate_moves(None, move)
+        s = state.simulate_moves(player_move, move)
 
-        #print(("\t") * depth + "opponent move: " + str(move))
-        #print(("\t") * depth + "player: " + str(s.player.body))
-        #print(("\t") * depth + "opponent: " + str(s.opponent.body))
+        s.print_state()
+        print(("\t") * depth + "opponent move: " + str(move))
+        print(("\t") * depth + "player: " + str(s.player.body))
+        print(("\t") * depth + "opponent: " + str(s.opponent.body))
 
         v = min(v, max_value(s, alpha, beta, depth - 1))
 
-        #print(("\t") * depth + str(v))
+        print(("\t") * depth + str(v))
 
         if v <= alpha:
             return v

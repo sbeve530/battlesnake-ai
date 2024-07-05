@@ -1,6 +1,6 @@
 import time
-
-from alpha_beta import alpha_beta_new, simple_game_state_new
+from alpha_beta.simple_game_state_new import SimpleGameState
+from alpha_beta.mcts import mcts
 
 test_game_state = {
     "game": {
@@ -36,7 +36,8 @@ test_game_state = {
                 "body": [
                     {"x": 2, "y": 5},
                     {"x": 2, "y": 4},
-                    {"x": 2, "y": 3}
+                    {"x": 2, "y": 3},
+                    {"x": 1, "y": 3}
                 ],
                 "latency": "111",
                 "head": {"x": 2, "y": 5},
@@ -89,13 +90,17 @@ test_game_state = {
         }
     }
 }
+player_move = "up"
 
 start = time.time()
-state = simple_game_state_new.SimpleGameState(test_game_state)
+state = SimpleGameState(test_game_state)
+print(mcts(state, 10, 100))
 
-move = alpha_beta_new.alpha_beta(state, 11)
+#move = monte_carlo_tree_search(state, 20, 25)
+
 end = time.time()
 
-print(move)
+#state.print_state()
+#print(move)
 
-print(end - start, "s")
+print(((end - start)*1000), "ms")
