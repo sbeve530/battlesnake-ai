@@ -11,8 +11,8 @@ def alpha_beta(state: SimpleGameState, cutoff_depth) -> str:
     safe_moves = state.safe_moves(state.player)
     min_values = [min_value(state.simulate_moves(safe_move, None), -float('inf'), float('inf'), cutoff_depth) for safe_move in safe_moves]
 
-    #print("moves: " + str(safe_moves))
-    #print("min_values: " + str(min_values))
+    print("moves: " + str(safe_moves))
+    print("min_values: " + str(min_values))
 
     best_move_index = max(enumerate(min_values), key=lambda x: x[1])[0]
     return safe_moves[best_move_index]

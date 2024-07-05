@@ -50,7 +50,7 @@ def end(game_state: typing.Dict):
 def move(game_state: typing.Dict) -> typing.Dict:
     start = time.time()
     state = SimpleGameState(game_state)
-    next_move = alpha_beta(state, 4)
+    next_move = alpha_beta(state, 1)
     end = time.time()
     print(end - start)
     print(f"MOVE {game_state['turn']}: {next_move}")
