@@ -38,7 +38,6 @@ test_game_state = {
                     {"x": 2, "y": 5},
                     {"x": 2, "y": 4},
                     {"x": 2, "y": 3},
-                    {"x": 1, "y": 3}
                 ],
                 "latency": "111",
                 "head": {"x": 2, "y": 5},
@@ -96,7 +95,7 @@ player_move = "up"
 start = time.time()
 
 state = SimpleGameState(test_game_state)
-print(mcts(state, 10, 10))
+print(mcts(state, 10, 100))
 
 end = time.time()
 

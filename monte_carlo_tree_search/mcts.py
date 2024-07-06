@@ -67,4 +67,4 @@ def random_move(state: SimpleGameState, snake: Snake) -> str:
     if safe_moves == []: # catch exception
         return "down"  # default
     else:
-        return random.choice(safe_moves)
+        return random.choices(safe_moves, weights=weights)[0]
