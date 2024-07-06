@@ -1,9 +1,10 @@
 from copy import deepcopy
-from typing import Dict
 from monte_carlo_tree_search.snake import Snake
 
 
 class SimpleGameState:
+    """A class to simplify the game-state-dict received in a server request and minimizing it to boost performance."""
+
     def __init__(self, game_state=None):
         if game_state is None:
             return
@@ -11,7 +12,7 @@ class SimpleGameState:
         self.y_size = game_state["board"]["height"]
         self.foods = game_state["board"]["food"]
         opponent_index = [index for index, snake in enumerate(game_state["board"]["snakes"]) if
-             snake["id"] != game_state["you"]["id"]][0]
+                          snake["id"] != game_state["you"]["id"]][0]
         self.player = Snake(game_state["you"]["id"],
                             game_state["you"]["body"],
                             game_state["you"]["health"],
@@ -46,11 +47,13 @@ class SimpleGameState:
         player_fed = False
         opponent_fed = False
         for food in new_state.foods:
-            if food == new_state.player.head and (food != new_state.opponent.head or len(self.player.body) > len(self.opponent.body)):
+            if food == new_state.player.head and (
+                    food != new_state.opponent.head or len(self.player.body) > len(self.opponent.body)):
                 new_state.foods.remove(food)
                 new_state.player.reset_health()
                 player_fed = True
-            if food == new_state.opponent.head and (food != new_state.player.head or len(self.opponent.body) > len(self.player.body)):
+            if food == new_state.opponent.head and (
+                    food != new_state.player.head or len(self.opponent.body) > len(self.player.body)):
                 new_state.foods.remove(food)
                 new_state.opponent.reset_health()
                 opponent_fed = True
@@ -77,7 +80,6 @@ class SimpleGameState:
             new_state.opponent.is_alive = False
 
         return new_state
-
 
     def copy(self):
         """:return: A deepcopy of  itself"""
@@ -113,7 +115,6 @@ class SimpleGameState:
 
         return possible_moves
 
-
     def is_terminal(self):
         """Checks if the game state is terminal.
         :return: True if the game state is terminal, False otherwise"""
@@ -121,6 +122,8 @@ class SimpleGameState:
             return True
 
     def eval_terminal(self):
+        """Evaluates a terminal game state.
+        :return: 1 for win, -1 for loss, 0 for draw"""
         if self.player.is_alive == self.opponent.is_alive:
             return 0
         elif self.player.is_alive == False:
@@ -129,10 +132,8 @@ class SimpleGameState:
             return 1
 
     def eval(self):
-        """
-        Utility function for evaluating a game state.
-        :return: the value of the game state
-        """
+        """Utility function for evaluating a game state.
+        :return: the value of the game state"""
         if self.player.is_alive == False:
             return -float('inf')
         if self.opponent.is_alive == False:
@@ -143,6 +144,7 @@ class SimpleGameState:
             return 0
 
     def print_state(self):
+        """Debugging function for printing the game state so that testing can be done locally more easily."""
         board = []
         print("+ " + "- " * self.x_size + "+")
         for y in range(self.y_size):
@@ -151,7 +153,6 @@ class SimpleGameState:
                 row.append('  ')
             row.append('|')
             board.append(row)
-
 
         for s in self.player.body:
             board[s["y"]][s["x"]] = 'x '

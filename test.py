@@ -1,7 +1,10 @@
+# This file is used to test the battlesnake-ai for a smaple-request.
+# Intensive testing has been performed during development to ensure that the ai operates correctly
+
 import time
-from monte_carlo_tree_search.simple_game_state_new import SimpleGameState
+from monte_carlo_tree_search.simple_game_state import SimpleGameState
 from monte_carlo_tree_search.mcts import mcts
-from monte_carlo_tree_search.heuristic import heuristic_2, normalize_heuristic, avoid_head_to_head
+from monte_carlo_tree_search.heuristic import heuristic, normalize_heuristic, head_to_head
 
 test_game_state = {
     "game": {
@@ -90,14 +93,13 @@ test_game_state = {
         }
     }
 }
-player_move = "up"
 
-start = time.time()
+#player_move = "up"
 
-state = SimpleGameState(test_game_state)
-print(avoid_head_to_head(state.player.head, state.opponent.head, len(state.player.body), len(state.opponent.body), 1, state.x_size))
+#start = time.time()
+#state = SimpleGameState(test_game_state)
+#print(avoid_head_to_head(state.player.head, state.opponent.head, len(state.player.body), len(state.opponent.body), 1, state.x_size))
 #print(mcts(state, 10, 100))
+#end = time.time()
 
-end = time.time()
-
-print(((end - start)*1000), "ms")
+#print(((end - start)*1000), "ms")

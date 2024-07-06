@@ -1,4 +1,6 @@
 class Snake:
+    """Class for representing snakes on the board."""
+
     def __init__(self, id, body, health, head):
         self.id = id
         self.body = body  # Dict Tuples
@@ -15,7 +17,6 @@ class Snake:
     def add_new_head(self, move):
         """Adds a new head to the snake according to the move.
         :param move: The move for where to add the head."""
-        #if not move: move = "down"
         if not move:
             return
 

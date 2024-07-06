@@ -1,47 +1,26 @@
 from typing import Dict
-import time
-from monte_carlo_tree_search.simple_game_state_new import SimpleGameState
+from monte_carlo_tree_search.simple_game_state import SimpleGameState
 
 from monte_carlo_tree_search.snake import Snake
-
-
-def heuristic(state: SimpleGameState, snake: Snake) -> Dict[str, float]:
-    def distance_to_nearest_food(point: Dict[str, float]) -> int:
-        min_dist = float("inf")
-        for food in state.foods:
-            min_dist = min(min_dist, abs(food["x"] - point["x"]) + abs(food["y"] - point["y"]))
-        return min_dist
-
-    heuristic = dict([[move, 0] for move in state.safe_moves(snake)])
-    new_head = snake.head.copy()
-    for move, probability in heuristic.items():
-        if move == "left":
-            new_head["x"] -= 1
-        elif move == "right":
-            new_head["x"] += 1
-        elif move == "up":
-            new_head["y"] += 1
-        elif move == "down":
-            new_head["y"] -= 1
-
-        heuristic[move] -= distance_to_nearest_food(new_head)
-    return heuristic
 
 
 # ideas:
 # - approach smaller snakes, avoid bigger snakes
 # - get food until bigger than every other snake (hunting and collecting mode)
 # X avoid map boarders
-# - avoid inner spirals (no three same turns in a row)
-# - avoid areas smaller than self
+# ? avoid inner spirals (no three same turns in a row?)
+# ? avoid areas smaller than self
 # X prioritize food based on hea;th
 # - lock off map when longer than 11
-# - floodfill evidence / provocation
+# ? floodfill evidence / provocation
 # - circle food
-# - avoid head-to-head
+# X avoid head-to-head
 
-def heuristic_2(state: SimpleGameState, snake: Snake) -> Dict[str, float]:
-    #start = time.time()
+def heuristic(state: SimpleGameState, snake: Snake) -> Dict[str, float]:
+    """A heuristic function that calculates a utility value for every legal move of a snake in the given game state.
+    :param state: The game state to evaluate on
+    :param snake: The snake to evaluate for
+    :return: A Dict containing a utility value for each legal move of a snake in the given game state. Sum of all utility values is 1"""
     heuristic = dict([[move, 0] for move in state.safe_moves(snake)])
     for move, probability in heuristic.items():
         new_head = snake.head.copy()
@@ -58,11 +37,10 @@ def heuristic_2(state: SimpleGameState, snake: Snake) -> Dict[str, float]:
         heuristic[move] += (
                 10 * food_rating(new_head, state.foods, state.x_size) +
                 1 * board_pos_rating(new_head, state.x_size, state.y_size) +
-                5 * avoid_head_to_head(new_head, state.opponent.head, len(snake.body), len(state.opponent.body), 2, state.x_size)
+                5 * head_to_head(new_head, state.opponent.head, len(snake.body), len(state.opponent.body), 2,
+                                 state.x_size)
         )
     res = normalize_heuristic(heuristic)
-    #end = time.time()
-    #print("heuristic: " + str((end - start) * 1000) + " ms")
     return res
 
 
@@ -83,7 +61,7 @@ def food_rating(point: Dict, foods: Dict, board_size: int) -> float:
     if min_dist < (board_size - 1) * 2:
         return 1 / (min_dist + 1)
     else:
-        return 0.5 # default
+        return 0.5  # default
 
 
 def board_pos_rating(point: Dict, x_size: int, y_size: int) -> float:
@@ -101,7 +79,15 @@ def board_pos_rating(point: Dict, x_size: int, y_size: int) -> float:
     return 1.0
 
 
-def avoid_head_to_head(new_player_head, opp_head, player_size, opp_size, min_size_difference, board_size) -> float:
+def head_to_head(new_player_head, opp_head, player_size, opp_size, min_size_difference, board_size) -> float:
+    """Calculates head-to-head utility for a given position and a given game state.
+    :param new_player_head: The new head location of the player
+    :param opp_head: The head location of the opponent
+    :param player_size: The size of the player snake
+    :param opp_size: The size of the opponent snake
+    :param min_size_difference: The minimum size difference between player and opponent needed to reward approaching opponent's head
+    :param board_size: The size of the board of the game
+    :return: 0 if player would collide with opponent body, (0, 1) depending on distance to opponent's head depending on if bigger than opponent"""
     distance = manhattan_distance(new_player_head, opp_head)
     if player_size >= (opp_size + min_size_difference):
         if distance == 0:
@@ -116,10 +102,17 @@ def avoid_head_to_head(new_player_head, opp_head, player_size, opp_size, min_siz
 
 
 def manhattan_distance(point_a: Dict[str, int], point_b: Dict[str, int]) -> int:
+    """Calculates the manhattan distance between two points.
+    :param point_a: Point on the board
+    :param point_b: Point on the board
+    :return: Manhattan distance of point_a and point_b"""
     return abs(point_a["x"] - point_b["x"]) + abs(point_a['y'] - point_b['y'])
 
 
 def normalize_heuristic(heuristic: Dict[str, float]) -> Dict[str, float]:
+    """Normalizes given heuristic Dict, making sure all values sum up to 1
+    :param heuristic: Dictionary containing heuristic values
+    :return: Dictionary containing normalized heuristic values"""
     values = [heuristic[move] for move, probability in heuristic.items()]
     _sum = sum(values)
     if _sum == 0:
