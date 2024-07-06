@@ -1,4 +1,5 @@
 from typing import Dict
+import time
 from monte_carlo_tree_search.simple_game_state_new import SimpleGameState
 
 from monte_carlo_tree_search.snake import Snake
@@ -24,7 +25,6 @@ def heuristic(state: SimpleGameState, snake: Snake) -> Dict[str, float]:
             new_head["y"] -= 1
 
         heuristic[move] -= distance_to_nearest_food(new_head)
-
     return heuristic
 
 
@@ -40,6 +40,7 @@ def heuristic(state: SimpleGameState, snake: Snake) -> Dict[str, float]:
 # - circle food
 
 def heuristic_2(state: SimpleGameState, snake: Snake) -> Dict[str, float]:
+    #start = time.time()
     heuristic = dict([[move, 0] for move in state.safe_moves(snake)])
     for move, probability in heuristic.items():
         new_head = snake.head.copy()
@@ -57,8 +58,10 @@ def heuristic_2(state: SimpleGameState, snake: Snake) -> Dict[str, float]:
                 10 * food_rating(new_head, state.foods, state.x_size) +
                 1 * board_pos_rating(new_head, state.x_size, state.y_size)
         )
-
-    return normalize_heuristic(heuristic)
+    res = normalize_heuristic(heuristic)
+    #end = time.time()
+    #print("heuristic: " + str((end - start) * 1000) + " ms")
+    return res
 
 
 def food_rating(point: Dict, foods: Dict, board_size: int) -> float:
@@ -77,6 +80,8 @@ def food_rating(point: Dict, foods: Dict, board_size: int) -> float:
             min_dist = distance
     if min_dist < (board_size - 1) * 2:
         return 1 / (min_dist + 1)
+    else:
+        return 0.5 # default
 
 
 def board_pos_rating(point: Dict, x_size: int, y_size: int) -> float:

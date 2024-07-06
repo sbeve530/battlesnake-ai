@@ -51,9 +51,9 @@ def end(game_state: typing.Dict):
 def move(game_state: typing.Dict) -> typing.Dict:
     start = time.time()
     state = SimpleGameState(game_state)
-    next_move = mcts(state, 10, 64)
+    next_move = mcts(state, 5, 32)
     end = time.time()
-    print(str((end - start) * 1000) + " ms")
+    print("total: " + str((end - start) * 1000) + " ms")
     print(f"MOVE {game_state['turn']}: {next_move}")
     return {"move": next_move}
 

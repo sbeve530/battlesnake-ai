@@ -12,6 +12,8 @@ def mcts(state: SimpleGameState, samples_per_move: int, max_sample_depth: int) -
     :param max_sample_depth: Maximum depth of the tree search
     :return: the best-evaluated move"""
     safe_moves = state.safe_moves(state.player)
+    bar = heuristic_2(state, state.player)
+    print(bar)
 
     if safe_moves == []: # catch exception
         return "down"  # default
@@ -22,14 +24,19 @@ def mcts(state: SimpleGameState, samples_per_move: int, max_sample_depth: int) -
         outcomes = []
         for sample in range(samples_per_move):
             outcomes.append(get_outcome(state, move, max_sample_depth))
-        print("move: " + str(move) + ", sample outcomes: " + str(outcomes))
+        
+        #print("move: " + str(move) + ", sample outcomes: " + str(outcomes))
 
-        wins = outcomes.count(1)
-        losses = outcomes.count(-1)
+        new_outcomes = [bar[move] if x == 0 else x for x in outcomes]
+        _sum = sum(new_outcomes)
+        #wins = outcomes.count(1)
+        #losses = outcomes.count(-1)
         #draws = outcomes.count(0)
 
-        move_ratings.append(wins - losses)
-    #print(move_ratings)
+        #move_ratings.append(wins - losses + draws * bar[move])
+        move_ratings.append(_sum)
+        #print("move: " + str(move) + ", sample outcomes: " + str(new_outcomes))
+    print(move_ratings)
     return safe_moves[max(enumerate(move_ratings), key=lambda x: x[1])[0]]
 
 
@@ -62,9 +69,14 @@ def random_move(state: SimpleGameState, snake: Snake) -> str:
     :param snake: The Snake object to choose a move for
     :return: A random move if possible, "down" otherwise"""
     safe_moves = state.safe_moves(snake)
-    foo = heuristic_2(state, snake)
-    weights = [foo[move] for move, probability in foo.items()]
-    if safe_moves == []: # catch exception
+    # für "morgen": heuristic zeit messen
+    #    ValueError: Total of weights must be greater than zero - exception
+    if safe_moves == [] or safe_moves is None: # catch exception
         return "down"  # default
+    if len(safe_moves) == 1:
+        return safe_moves[0]
     else:
+        foo = heuristic_2(state, snake)
+        weights = [foo[move] for move, probability in foo.items()]
+        #print(weights)
         return random.choices(safe_moves, weights=weights)[0]
