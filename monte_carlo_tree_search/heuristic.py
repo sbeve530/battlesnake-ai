@@ -31,13 +31,14 @@ def heuristic(state: SimpleGameState, snake: Snake) -> Dict[str, float]:
 # ideas:
 # - approach smaller snakes, avoid bigger snakes
 # - get food until bigger than every other snake (hunting and collecting mode)
-# - avoid map boarders
+# X avoid map boarders
 # - avoid inner spirals (no three same turns in a row)
 # - avoid areas smaller than self
-# - prioritize food based on hea;th
+# X prioritize food based on hea;th
 # - lock off map when longer than 11
 # - floodfill evidence / provocation
 # - circle food
+# - avoid head-to-head
 
 def heuristic_2(state: SimpleGameState, snake: Snake) -> Dict[str, float]:
     #start = time.time()
@@ -56,7 +57,8 @@ def heuristic_2(state: SimpleGameState, snake: Snake) -> Dict[str, float]:
 
         heuristic[move] += (
                 10 * food_rating(new_head, state.foods, state.x_size) +
-                1 * board_pos_rating(new_head, state.x_size, state.y_size)
+                1 * board_pos_rating(new_head, state.x_size, state.y_size) +
+                5 * avoid_head_to_head(new_head, state.opponent.head, len(snake.body), len(state.opponent.body), 2, state.x_size)
         )
     res = normalize_heuristic(heuristic)
     #end = time.time()
@@ -97,6 +99,20 @@ def board_pos_rating(point: Dict, x_size: int, y_size: int) -> float:
     if point["y"] == 0 or point["y"] == y_size - 1:
         return 0.5
     return 1.0
+
+
+def avoid_head_to_head(new_player_head, opp_head, player_size, opp_size, min_size_difference, board_size) -> float:
+    distance = manhattan_distance(new_player_head, opp_head)
+    if player_size >= (opp_size + min_size_difference):
+        if distance == 0:
+            return 0
+        else:
+            return 1 / (distance)
+    else:
+        if distance == 0:
+            return 0
+        else:
+            return distance / (2 * (board_size - 1))
 
 
 def manhattan_distance(point_a: Dict[str, int], point_b: Dict[str, int]) -> int:

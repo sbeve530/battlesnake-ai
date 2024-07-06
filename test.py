@@ -1,7 +1,7 @@
 import time
 from monte_carlo_tree_search.simple_game_state_new import SimpleGameState
 from monte_carlo_tree_search.mcts import mcts
-from monte_carlo_tree_search.heuristic import heuristic_2, normalize_heuristic
+from monte_carlo_tree_search.heuristic import heuristic_2, normalize_heuristic, avoid_head_to_head
 
 test_game_state = {
     "game": {
@@ -95,7 +95,8 @@ player_move = "up"
 start = time.time()
 
 state = SimpleGameState(test_game_state)
-print(mcts(state, 10, 100))
+print(avoid_head_to_head(state.player.head, state.opponent.head, len(state.player.body), len(state.opponent.body), 1, state.x_size))
+#print(mcts(state, 10, 100))
 
 end = time.time()
 
