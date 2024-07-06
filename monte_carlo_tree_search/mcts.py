@@ -1,7 +1,8 @@
 import random
 
-from alpha_beta.simple_game_state_new import SimpleGameState
-from alpha_beta.snake import Snake
+from monte_carlo_tree_search.simple_game_state_new import SimpleGameState
+from monte_carlo_tree_search.snake import Snake
+from monte_carlo_tree_search.heuristic import heuristic_2
 
 
 def mcts(state: SimpleGameState, samples_per_move: int, max_sample_depth: int) -> str:
@@ -15,14 +16,13 @@ def mcts(state: SimpleGameState, samples_per_move: int, max_sample_depth: int) -
     if safe_moves == []: # catch exception
         return "down"  # default
 
-    #print(safe_moves)
     move_ratings = []
 
     for move in safe_moves:
         outcomes = []
         for sample in range(samples_per_move):
             outcomes.append(get_outcome(state, move, max_sample_depth))
-        #print("move: " + str(move) + ", sample outcomes: " + str(outcomes))
+        print("move: " + str(move) + ", sample outcomes: " + str(outcomes))
 
         wins = outcomes.count(1)
         losses = outcomes.count(-1)
@@ -43,6 +43,7 @@ def get_outcome(state: SimpleGameState, player_move: str, max_path_depth: int) -
         return 0
 
     depth = 1
+
     init_opp_move = random_move(state, state.opponent)
     curr_state = state.simulate_moves(player_move, init_opp_move)
 
@@ -61,6 +62,8 @@ def random_move(state: SimpleGameState, snake: Snake) -> str:
     :param snake: The Snake object to choose a move for
     :return: A random move if possible, "down" otherwise"""
     safe_moves = state.safe_moves(snake)
+    foo = heuristic_2(state, snake)
+    weights = [foo[move] for move, probability in foo.items()]
     if safe_moves == []: # catch exception
         return "down"  # default
     else:

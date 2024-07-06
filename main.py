@@ -15,9 +15,9 @@ import typing
 import copy
 import time
 
-from alpha_beta.alpha_beta_new import alpha_beta
-from alpha_beta.simple_game_state_new import SimpleGameState
-from alpha_beta.mcts import mcts
+from monte_carlo_tree_search.alpha_beta_new import alpha_beta
+from monte_carlo_tree_search.simple_game_state_new import SimpleGameState
+from monte_carlo_tree_search.mcts import mcts
 
 
 # info is called when you create your Battlesnake on play.battlesnake.com

@@ -1,4 +1,4 @@
-from alpha_beta.simple_game_state_new import SimpleGameState
+from monte_carlo_tree_search.simple_game_state_new import SimpleGameState
 
 
 def alpha_beta(state: SimpleGameState, cutoff_depth) -> str:

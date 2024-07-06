@@ -1,7 +1,7 @@
 import math
 import random
 
-from alpha_beta import is_terminal
+from monte_carlo_tree_search import is_terminal
 from simple_game_state import SimpleGameState
 
 

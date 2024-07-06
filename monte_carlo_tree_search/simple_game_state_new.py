@@ -1,6 +1,6 @@
 from copy import deepcopy
 from typing import Dict
-from alpha_beta.snake import Snake
+from monte_carlo_tree_search.snake import Snake
 
 
 class SimpleGameState:

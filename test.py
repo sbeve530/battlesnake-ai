@@ -1,6 +1,7 @@
 import time
-from alpha_beta.simple_game_state_new import SimpleGameState
-from alpha_beta.mcts import mcts
+from monte_carlo_tree_search.simple_game_state_new import SimpleGameState
+from monte_carlo_tree_search.mcts import mcts
+from monte_carlo_tree_search.heuristic import heuristic_2, normalize_heuristic
 
 test_game_state = {
     "game": {
@@ -93,14 +94,10 @@ test_game_state = {
 player_move = "up"
 
 start = time.time()
-state = SimpleGameState(test_game_state)
-print(mcts(state, 10, 100))
 
-#move = monte_carlo_tree_search(state, 20, 25)
+state = SimpleGameState(test_game_state)
+print(mcts(state, 10, 10))
 
 end = time.time()
-
-#state.print_state()
-#print(move)
 
 print(((end - start)*1000), "ms")
