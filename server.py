@@ -1,3 +1,11 @@
+# Florian Darsow, 222200974
+# Michael Gutbrod, 222201691
+# Milan Kai, 222201385
+# Jannes Peters, 221201486
+# Felix Thiesen, 223202358
+
+# This file has not been changed
+
 import logging
 import os
 import typing
