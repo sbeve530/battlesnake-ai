@@ -1,5 +1,17 @@
+# Florian Darsow, 222200974
+# Michael Gutbrod, 222201691
+# Milan Kai, 222201385
+# Jannes Peters, 221201486
+# Felix Thiesen, 223202358
+
 class Snake:
-    """Class for representing snakes on the board."""
+    """Class for representing snakes on the board. Makes it easier to implement state-simulation.
+    Attributes:
+        id: id of the snake
+        body: all body parts as dict-points (including head)
+        head: the head as a dict-point
+        health: health-points
+        is_alive: attribute used to tell if a snake is alive"""
 
     def __init__(self, id, body, health, head):
         self.id = id

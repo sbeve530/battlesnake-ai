@@ -1,3 +1,9 @@
+# Florian Darsow, 222200974
+# Michael Gutbrod, 222201691
+# Milan Kai, 222201385
+# Jannes Peters, 221201486
+# Felix Thiesen, 223202358
+
 import random
 from monte_carlo_tree_search.simple_game_state import SimpleGameState
 from monte_carlo_tree_search.snake import Snake

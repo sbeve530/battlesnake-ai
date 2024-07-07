@@ -1,9 +1,21 @@
+# Florian Darsow, 222200974
+# Michael Gutbrod, 222201691
+# Milan Kai, 222201385
+# Jannes Peters, 221201486
+# Felix Thiesen, 223202358
+
 from copy import deepcopy
 from monte_carlo_tree_search.snake import Snake
 
 
 class SimpleGameState:
-    """A class to simplify the game-state-dict received in a server request and minimizing it to boost performance."""
+    """A class to simplify the game-state-dict received in a server request and minimizing it to boost performance.
+    Attributes:
+        x_size: The number of grid-cells in the x direction.
+        y_size: The number of grid-cells in the y direction.
+        foods: The list of foods currently present on the board
+        player: The snake controlled by the player
+        opponent: The snake controlled by the opponent"""
 
     def __init__(self, game_state=None):
         if game_state is None:
