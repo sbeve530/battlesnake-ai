@@ -71,4 +71,6 @@ def random_move(state: SimpleGameState, snake: Snake) -> str:
     else:
         calculated_heuristic = heuristic(state, snake)
         weights = [calculated_heuristic[move] for move, probability in calculated_heuristic.items()]
+        if sum(weights) == 0:
+            return random.choice(safe_moves)
         return random.choices(safe_moves, weights=weights)[0]

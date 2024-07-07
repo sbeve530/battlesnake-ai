@@ -37,7 +37,9 @@ def move(game_state: typing.Dict) -> typing.Dict:
     :return: The move with the best evaluated outcome"""
     start = time.time()
     state = SimpleGameState(game_state)
-    next_move = mcts(state, 5, 32)
+    
+    next_move = mcts(state, 5, 16)
+    
     end = time.time()
     print("total: " + str((end - start) * 1000) + " ms")
     print(f"MOVE {game_state['turn']}: {next_move}")

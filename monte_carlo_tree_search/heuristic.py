@@ -35,9 +35,9 @@ def heuristic(state: SimpleGameState, snake: Snake) -> Dict[str, float]:
             new_head["y"] -= 1
 
         heuristic[move] += (
-                10 * food_rating(new_head, state.foods, state.x_size) +
-                1 * board_pos_rating(new_head, state.x_size, state.y_size) +
-                5 * head_to_head(new_head, state.opponent.head, len(snake.body), len(state.opponent.body), 2,
+                5 * food_rating(new_head, state.foods, state.x_size) +
+                0.5 * board_pos_rating(new_head, state.x_size, state.y_size) +
+                1 * head_to_head(new_head, state.opponent.head, len(snake.body), len(state.opponent.body), 2,
                                  state.x_size)
         )
     res = normalize_heuristic(heuristic)
